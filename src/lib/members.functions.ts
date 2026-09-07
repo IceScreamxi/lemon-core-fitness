@@ -23,9 +23,6 @@ const memberSchema = z.object({
   plan: z.enum(["monthly", "day-pass"]),
   paymentMethod: z.string().min(1),
   isStudentOrSenior: z.boolean(),
-  fitnessGoal: z.string().optional(),
-  experienceLevel: z.string().optional(),
-  medicalNotes: z.string().optional(),
 });
 
 export type MemberInput = z.infer<typeof memberSchema>;
@@ -55,12 +52,8 @@ export const HEADERS = [
   "Amount (PHP)",
   "Payment Method",
   "Student/Senior",
-  "Fitness Goal",
-  "Experience Level",
-  "Medical Notes",
   "Start Date",
   "Expiry Date",
-  "Registered At",
 ] as const;
 
 function formatDate(d: Date): string {
@@ -116,12 +109,8 @@ export const registerMember = createServerFn({ method: "POST" })
       record.amount,
       record.paymentMethod,
       record.isStudentOrSenior ? "Yes" : "No",
-      record.fitnessGoal,
-      record.experienceLevel,
-      record.medicalNotes,
       record.startDate,
       record.expiryDate,
-      record.registeredAt,
     ];
 
     // Append to Google Sheet
@@ -145,7 +134,7 @@ export const listMembers = createServerFn({ method: "GET" }).handler(
         memberId: String(r[0]),
         name: `${r[1]} ${r[2]}`,
         plan: String(r[11]),
-        expiryDate: String(r[18]),
+        expiryDate: String(r[16]),
       }));
   },
 );

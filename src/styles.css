@@ -1,0 +1,124 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  /* Ironroom brand tokens */
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-coral: var(--coral);
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --color-panel: var(--panel);
+  --color-panel-border: var(--panel-border);
+  --color-field: var(--field);
+  --color-field-border: var(--field-border);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.96 0.02 75);
+  --foreground: oklch(0.28 0.05 40);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.28 0.05 40);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.28 0.05 40);
+  --primary: oklch(0.769 0.188 70.08);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.94 0.03 70);
+  --secondary-foreground: oklch(0.28 0.05 40);
+  --muted: oklch(0.94 0.03 70);
+  --muted-foreground: oklch(0.5 0.04 45);
+  --accent: oklch(0.712 0.194 13.43);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.88 0.03 65);
+  --input: oklch(0.88 0.03 65);
+  --ring: oklch(0.769 0.188 70.08);
+
+  /* Ironroom brand tokens */
+  --brand: oklch(76.481% 0.17225 64.475 / 0.849);
+  --brand-strong: oklch(96.479% 0.21188 110.946);
+  --brand-foreground: oklch(1 0 0);
+  --coral: oklch(70.71% 0.18657 144.088);
+  --cream: oklch(0.975 0.017 78);
+  --ink: oklch(0.28 0.05 40);
+  --panel: oklch(1 0 0 / 55%);
+  --panel-border: oklch(1 0 0 / 65%);
+  --field: oklch(1 0 0 / 70%);
+  --field-border: oklch(1 0 0 / 75%);
+
+  --font-heading: "Sora", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+@utility glass-panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+@utility gradient-brand {
+  background-image: linear-gradient(
+    135deg,
+    var(--brand),
+    var(--coral)
+  );
+}
+
+@utility page-sunset {
+  background-image: linear-gradient(
+    135deg,
+    oklch(0.93 0.05 80),
+    oklch(0.96 0.02 55),
+    oklch(0.94 0.04 75)
+  );
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+  }
+}

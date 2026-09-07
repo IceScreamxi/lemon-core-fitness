@@ -55,9 +55,7 @@ const EMPTY: MemberInput = {
   plan: "monthly",
   paymentMethod: "Cash",
   isStudentOrSenior: false,
-  fitnessGoal: "",
-  experienceLevel: "Beginner",
-  medicalNotes: "",
+  monthsDuration: 1,
 };
 
 const REQUIRED_BY_STEP: (keyof MemberInput)[][] = [
@@ -91,7 +89,7 @@ function Index() {
     onError: () => setError("Registration failed. Please try again."),
   });
 
-  const set = (key: keyof MemberInput, value: string | boolean) =>
+  const set = (key: keyof MemberInput, value: string | boolean | number) =>
     setForm((f) => ({ ...f, [key]: value }) as MemberInput);
 
   const next = () => {

@@ -23,7 +23,7 @@ function Field({
 
 interface MembershipPaymentFormProps {
   form: MemberInput;
-  setForm: (key: keyof MemberInput, value: string | boolean) => void;
+  setForm: (key: keyof MemberInput, value: string | boolean | number) => void;
 }
 
 export function MembershipPaymentForm({
@@ -31,7 +31,9 @@ export function MembershipPaymentForm({
   setForm,
 }: MembershipPaymentFormProps) {
   const plan = MEMBERSHIP_PLANS.find((p) => p.id === form.plan) || MEMBERSHIP_PLANS[0];
-  const price = form.isStudentOrSenior ? plan.studentPrice : plan.regularPrice;
+  const duration = form.plan === "monthly" && form.monthsDuration ? form.monthsDuration : plan.months;
+  const basePrice = form.isStudentOrSenior ? plan.studentPrice : plan.regularPrice;
+  const price = form.plan === "monthly" && form.monthsDuration && form.monthsDuration > 1 ? basePrice * form.monthsDuration : basePrice;
 
   return (
     <>
@@ -67,6 +69,22 @@ export function MembershipPaymentForm({
           <option value="student-senior">Student / Senior</option>
         </select>
       </Field>
+      {form.plan === "monthly" && (
+        <Field label="Duration">
+          <select
+            className={fieldClass}
+            value={form.monthsDuration || 1}
+            onChange={(e) => setForm("monthsDuration", parseInt(e.target.value))}
+          >
+            <option value={1}>1 month</option>
+            {[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((months) => (
+              <option key={months} value={months}>
+                {months} months
+              </option>
+            ))}
+          </select>
+        </Field>
+      )}
       <Field label="Payment method">
         <select
           className={fieldClass}
@@ -75,9 +93,7 @@ export function MembershipPaymentForm({
         >
           <option>Cash</option>
           <option>GCash</option>
-          <option>Maya</option>
           <option>Bank Transfer</option>
-          <option>Credit / Debit Card</option>
         </select>
       </Field>
       <div className="flex items-end">

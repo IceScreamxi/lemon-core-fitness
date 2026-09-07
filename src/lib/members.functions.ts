@@ -3,8 +3,8 @@ import { z } from "zod";
 import { appendToSheet, getSheetData, initializeSheet } from "./google-sheets.service";
 
 export const MEMBERSHIP_PLANS = [
-  { id: "monthly", label: "Monthly", months: 1, studentPrice: 800, regularPrice: 1000 },
-  { id: "day-pass", label: "Day Pass", months: 0, studentPrice: 80, regularPrice: 90 },
+  { id: "monthly", label: "Monthly", months: 1, studentPrice: 700, regularPrice: 800 },
+  { id: "day-pass", label: "Day Pass", months: 0, studentPrice: 60, regularPrice: 70 },
 ] as const;
 
 export type MembershipPlanId = (typeof MEMBERSHIP_PLANS)[number]["id"];
@@ -23,6 +23,7 @@ const memberSchema = z.object({
   plan: z.enum(["monthly", "day-pass"]),
   paymentMethod: z.string().min(1),
   isStudentOrSenior: z.boolean(),
+  monthsDuration: z.number().optional(),
 });
 
 export type MemberInput = z.infer<typeof memberSchema>;
@@ -75,18 +76,30 @@ export const registerMember = createServerFn({ method: "POST" })
     const memberRows = existingData
       .slice(1)
       .filter((r) => typeof r?.[0] === "string" && r[0].startsWith("GYM-"));
-    const nextNumber = memberRows.length + 1;
+    
+    // Extract the highest member number from existing IDs
+    const memberNumbers = memberRows
+      .map((r) => {
+        const match = String(r[0]).match(/GYM-(\d+)/);
+        return match ? parseInt(match[1], 10) : 0;
+      })
+      .filter((n) => n > 0);
+    
+    const maxNumber = memberNumbers.length > 0 ? Math.max(...memberNumbers) : 0;
+    const nextNumber = maxNumber + 1;
 
     const plan = MEMBERSHIP_PLANS.find((p) => p.id === data.plan)!;
-    const amount = data.isStudentOrSenior ? plan.studentPrice : plan.regularPrice;
+    const duration = data.plan === "monthly" && data.monthsDuration ? data.monthsDuration : plan.months;
+    const basePrice = data.isStudentOrSenior ? plan.studentPrice : plan.regularPrice;
+    const amount = data.plan === "monthly" && data.monthsDuration ? basePrice * data.monthsDuration : basePrice;
     const start = new Date();
     const expiry = new Date(start);
-    expiry.setMonth(expiry.getMonth() + plan.months);
+    expiry.setMonth(expiry.getMonth() + duration);
 
     const record: MemberRecord = {
       ...data,
       memberId: `GYM-${String(nextNumber).padStart(5, "0")}`,
-      planLabel: plan.label,
+      planLabel: data.plan === "monthly" && data.monthsDuration ? `${plan.label} (${data.monthsDuration} months)` : plan.label,
       amount: amount,
       startDate: formatDate(start),
       expiryDate: formatDate(expiry),

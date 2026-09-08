@@ -44,7 +44,7 @@ export async function appendToSheet(data: any[]) {
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: SPREADSHEET_ID,
-    range: 'September!A1',
+    range: 'Members!A1',
     valueInputOption: 'USER_ENTERED',
     insertDataOption: 'INSERT_ROWS',
     requestBody: {
@@ -58,7 +58,7 @@ export async function getSheetData() {
 
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId: SPREADSHEET_ID,
-    range: 'September!A1:Z',
+    range: 'Members!A1:Z',
   });
 
   return response.data.values || [];
@@ -71,7 +71,7 @@ export async function initializeSheet(headers: string[]) {
   if (existingData.length === 0) {
     await sheets.spreadsheets.values.update({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'September!A1',
+      range: 'Members!A1',
       valueInputOption: 'USER_ENTERED',
       requestBody: {
         values: [headers],

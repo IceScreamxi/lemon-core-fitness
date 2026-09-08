@@ -21,6 +21,9 @@ async function checkSheet() {
         .filter((r) => typeof r?.[0] === "string" && r[0].startsWith("GYM-"));
       
       console.log(`\nMember rows found: ${memberRows.length}`);
+      if (memberRows.length > 0) {
+        console.log("Sample member:", memberRows[0]);
+      }
     }
   } catch (error) {
     console.error("❌ Failed to check sheet:", error);

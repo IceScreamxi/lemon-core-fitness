@@ -76,17 +76,7 @@ export const registerMember = createServerFn({ method: "POST" })
     const memberRows = existingData
       .slice(1)
       .filter((r) => typeof r?.[0] === "string" && r[0].startsWith("GYM-"));
-    
-    // Extract the highest member number from existing IDs
-    const memberNumbers = memberRows
-      .map((r) => {
-        const match = String(r[0]).match(/GYM-(\d+)/);
-        return match ? parseInt(match[1], 10) : 0;
-      })
-      .filter((n) => n > 0);
-    
-    const maxNumber = memberNumbers.length > 0 ? Math.max(...memberNumbers) : 0;
-    const nextNumber = maxNumber + 1;
+    const nextNumber = memberRows.length + 1;
 
     const plan = MEMBERSHIP_PLANS.find((p) => p.id === data.plan)!;
     const duration = data.plan === "monthly" && data.monthsDuration ? data.monthsDuration : plan.months;

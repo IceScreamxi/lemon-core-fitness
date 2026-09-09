@@ -1,6 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { appendToSheet, getSheetData, initializeSheet } from "./google-sheets.service";
+import { format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 
 export const MEMBERSHIP_PLANS = [
   { id: "monthly", label: "Monthly", months: 1, studentPrice: 700, regularPrice: 800 },
@@ -34,7 +36,6 @@ export type MemberRecord = MemberInput & {
   amount: number;
   startDate: string;
   expiryDate: string;
-  registeredAt: string;
 };
 
 export const HEADERS = [
@@ -58,11 +59,8 @@ export const HEADERS = [
 ] as const;
 
 function formatDate(d: Date): string {
-  return d.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const phTime = toZonedTime(d, "Asia/Manila");
+  return format(phTime, "MMM d, yyyy");
 }
 
 export const registerMember = createServerFn({ method: "POST" })
@@ -93,7 +91,6 @@ export const registerMember = createServerFn({ method: "POST" })
       amount: amount,
       startDate: formatDate(start),
       expiryDate: formatDate(expiry),
-      registeredAt: start.toISOString(),
     };
 
     const row = [

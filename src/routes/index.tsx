@@ -213,13 +213,11 @@ function Index() {
         <section className="mt-8">
           <h2 className="font-display text-lg font-bold text-ink">Registered members</h2>
           <div className="glass-panel mt-3 overflow-x-auto rounded-2xl">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-center text-sm">
               <thead className="text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
                   <th className="px-4 py-3">Member ID</th>
                   <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Plan</th>
-                  <th className="px-4 py-3">{"\n"}</th>
                 </tr>
               </thead>
               <tbody>
@@ -227,13 +225,11 @@ function Index() {
                   <tr key={m.memberId} className="border-t border-field-border text-ink">
                     <td className="px-4 py-3 font-mono text-xs">{m.memberId}</td>
                     <td className="px-4 py-3">{m.name}</td>
-                    <td className="px-4 py-3">{m.plan}</td>
-                    <td className="px-4 py-3">{"\n"}</td>
                   </tr>
                 ))}
                 {!members.data?.length && (
                   <tr>
-                    <td className="px-4 py-6 text-muted-foreground" colSpan={4}>
+                    <td className="px-4 py-6 text-muted-foreground" colSpan={2}>
                       No members yet — register the first one above.
                     </td>
                   </tr>
